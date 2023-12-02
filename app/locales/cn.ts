@@ -126,7 +126,7 @@ const cn = {
   },
   Settings: {
     Title: "设置",
-    SubTitle: "所有设置选项",
+    SubTitle: "所有设置选(不懂的话不要乱设置)",
 
     Danger: {
       Reset: {
@@ -362,9 +362,9 @@ const cn = {
   },
   Context: {
     Toast: (x: any) => `包含 ${x} 条预设提示词`,
-    Edit: "当前对话设置",
+    Edit: "当前对话设置(不懂的话别乱调)",
     Add: "新增一条对话",
-    Clear: "上下文已清除",
+    Clear: "上下文已清除(继续聊天不会携带本行上面的内容)",
     Revert: "恢复上下文",
   },
   Plugin: {

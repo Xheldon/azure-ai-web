@@ -2,8 +2,8 @@ version: "3.9"
 services:
   chatgpt-next-web:
     profiles: ["no-proxy"]
-    container_name: chatgpt-next-web
-    image: yidadaa/chatgpt-next-web
+    container_name: xhelper-ai-web
+    image: xheldon/xhelper-ai-web
     ports:
       - 3000:3000
     environment:

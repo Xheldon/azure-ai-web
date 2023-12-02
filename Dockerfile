@@ -11,6 +11,8 @@ COPY package.json yarn.lock ./
 RUN yarn config set registry 'https://registry.npmmirror.com/'
 RUN yarn install
 
+RUN yarn add sharp
+
 FROM base AS builder
 
 RUN apk update && apk add --no-cache git

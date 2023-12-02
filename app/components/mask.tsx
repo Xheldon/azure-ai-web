@@ -97,17 +97,17 @@ export function MaskConfig(props: {
 
   return (
     <>
-      <ContextPrompts
+      {/* <ContextPrompts
         context={props.mask.context}
         updateContext={(updater) => {
           const context = props.mask.context.slice();
           updater(context);
           props.updateMask((mask) => (mask.context = context));
         }}
-      />
+      /> */}
 
       <List>
-        <ListItem title={Locale.Mask.Config.Avatar}>
+        {/* <ListItem title={Locale.Mask.Config.Avatar}>
           <Popover
             content={
               <AvatarPicker
@@ -155,7 +155,7 @@ export function MaskConfig(props: {
               });
             }}
           ></input>
-        </ListItem>
+        </ListItem> */}
 
         {!props.shouldSyncFromGlobal ? (
           <ListItem
