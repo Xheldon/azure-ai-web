@@ -101,58 +101,58 @@ export const DEFAULT_MODELS = [
     name: "gpt-4",
     available: true,
   },
-  {
+  /* {
     name: "gpt-4-0314",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-0613",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-32k",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-32k-0314",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-32k-0613",
-    available: true,
-  },
-  {
+    available: false,
+  }, */
+  /* {
     name: "gpt-4-1106-preview",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-vision-preview",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-0301",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-0613",
-    available: true,
-  },
+    available: false,
+  }, */
   {
     name: "gpt-3.5-turbo-1106",
     available: true,
   },
-  {
+  /* {
     name: "gpt-3.5-turbo-16k",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-16k-0613",
-    available: true,
-  },
+    available: false,
+  }, */
 ] as const;
 
 export const CHAT_PAGE_SIZE = 15;

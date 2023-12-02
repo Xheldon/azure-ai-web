@@ -56,6 +56,7 @@ export const useUpdateStore = createPersistStore(
   },
   (set, get) => ({
     formatVersion(version: string) {
+      return;
       if (get().versionType === "date") {
         version = formatVersionDate(version);
       }
@@ -63,6 +64,7 @@ export const useUpdateStore = createPersistStore(
     },
 
     async getLatestVersion(force = false) {
+      return;
       const versionType = get().versionType;
       let version =
         versionType === "date"
@@ -85,35 +87,40 @@ export const useUpdateStore = createPersistStore(
         }));
         if (window.__TAURI__?.notification && isApp) {
           // Check if notification permission is granted
-          await window.__TAURI__?.notification.isPermissionGranted().then((granted) => {
-            if (!granted) {
-              return;
-            } else {
-              // Request permission to show notifications
-              window.__TAURI__?.notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                  if (version === remoteId) {
-                    // Show a notification using Tauri
-                    window.__TAURI__?.notification.sendNotification({
-                      title: "ChatGPT Next Web",
-                      body: `${Locale.Settings.Update.IsLatest}`,
-                      icon: `${ChatGptIcon.src}`,
-                      sound: "Default"
-                    });
-                  } else {
-                    const updateMessage = Locale.Settings.Update.FoundUpdate(`${remoteId}`);
-                    // Show a notification for the new version using Tauri
-                    window.__TAURI__?.notification.sendNotification({
-                      title: "ChatGPT Next Web",
-                      body: updateMessage,
-                      icon: `${ChatGptIcon.src}`,
-                      sound: "Default"
-                    });
-                  }
-                }
-              });
-            }
-          });
+          await window.__TAURI__?.notification
+            .isPermissionGranted()
+            .then((granted) => {
+              if (!granted) {
+                return;
+              } else {
+                // Request permission to show notifications
+                window.__TAURI__?.notification
+                  .requestPermission()
+                  .then((permission) => {
+                    if (permission === "granted") {
+                      if (version === remoteId) {
+                        // Show a notification using Tauri
+                        window.__TAURI__?.notification.sendNotification({
+                          title: "Xhelper AI Web",
+                          body: `${Locale.Settings.Update.IsLatest}`,
+                          icon: `${ChatGptIcon.src}`,
+                          sound: "Default",
+                        });
+                      } else {
+                        const updateMessage =
+                          Locale.Settings.Update.FoundUpdate(`${remoteId}`);
+                        // Show a notification for the new version using Tauri
+                        window.__TAURI__?.notification.sendNotification({
+                          title: "Xhelper AI Web",
+                          body: updateMessage,
+                          icon: `${ChatGptIcon.src}`,
+                          sound: "Default",
+                        });
+                      }
+                    }
+                  });
+              }
+            });
         }
         console.log("[Got Upstream] ", remoteId);
       } catch (error) {
@@ -122,6 +129,7 @@ export const useUpdateStore = createPersistStore(
     },
 
     async updateUsage(force = false) {
+      return;
       const overOneMinute = Date.now() - get().lastUpdateUsage >= ONE_MINUTE;
       if (!overOneMinute && !force) return;
 

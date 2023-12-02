@@ -491,7 +491,7 @@ function SyncItems() {
   return (
     <>
       <List>
-        <ListItem
+        {/* <ListItem
           title={Locale.Settings.Sync.CloudState}
           subTitle={
             syncStore.lastProvider
@@ -525,7 +525,7 @@ function SyncItems() {
               />
             )}
           </div>
-        </ListItem>
+        </ListItem> */}
 
         <ListItem
           title={Locale.Settings.Sync.LocalState}
@@ -571,13 +571,13 @@ export function Settings() {
   const updateUrl = getClientConfig()?.isApp ? RELEASE_URL : UPDATE_URL;
 
   function checkUpdate(force = false) {
-    setCheckingUpdate(true);
+    /* setCheckingUpdate(true);
     updateStore.getLatestVersion(force).then(() => {
       setCheckingUpdate(false);
     });
 
     console.log("[Update] local version ", updateStore.version);
-    console.log("[Update] remote version ", updateStore.remoteVersion);
+    console.log("[Update] remote version ", updateStore.remoteVersion); */
   }
 
   const accessStore = useAccessStore();
@@ -624,8 +624,8 @@ export function Settings() {
   const showUsage = accessStore.isAuthorized();
   useEffect(() => {
     // checks per minutes
-    checkUpdate();
-    showUsage && checkUsage();
+    /* checkUpdate();
+    showUsage && checkUsage(); */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -635,7 +635,8 @@ export function Settings() {
         navigate(Path.Home);
       }
     };
-    if (clientConfig?.isApp) { // Force to set custom endpoint to true if it's app
+    if (clientConfig?.isApp) {
+      // Force to set custom endpoint to true if it's app
       accessStore.update((state) => {
         state.useCustomConfig = true;
       });
@@ -697,7 +698,7 @@ export function Settings() {
             </Popover>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
             subTitle={
               checkingUpdate
@@ -720,7 +721,7 @@ export function Settings() {
                 onClick={() => checkUpdate(true)}
               />
             )}
-          </ListItem>
+          </ListItem> */}
 
           <ListItem title={Locale.Settings.SendKey}>
             <Select
@@ -757,7 +758,7 @@ export function Settings() {
             </Select>
           </ListItem>
 
-          <ListItem title={Locale.Settings.Lang.Name}>
+          {/* <ListItem title={Locale.Settings.Lang.Name}>
             <Select
               value={getLang()}
               onChange={(e) => {
@@ -770,7 +771,7 @@ export function Settings() {
                 </option>
               ))}
             </Select>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem
             title={Locale.Settings.FontSize.Title}
@@ -912,7 +913,7 @@ export function Settings() {
             </ListItem>
           )}
 
-          {!accessStore.hideUserApiKey && (
+          {/* {!accessStore.hideUserApiKey && (
             <>
               {
                 // Conditionally render the following ListItem based on clientConfig.isApp
@@ -1060,7 +1061,7 @@ export function Settings() {
                 </>
               )}
             </>
-          )}
+          )} */}
 
           {!shouldHideBalanceQuery && !clientConfig?.isApp ? (
             <ListItem
@@ -1088,7 +1089,7 @@ export function Settings() {
             </ListItem>
           ) : null}
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.Access.CustomModel.Title}
             subTitle={Locale.Settings.Access.CustomModel.SubTitle}
           >
@@ -1102,7 +1103,7 @@ export function Settings() {
                 )
               }
             ></input>
-          </ListItem>
+          </ListItem> */}
         </List>
 
         <List>
