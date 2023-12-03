@@ -2,6 +2,32 @@ import { BuiltinMask } from "./typing";
 
 export const CN_MASKS: BuiltinMask[] = [
   {
+    avatar: "1f9d1-200d-1f3eb",
+    name: "初高中老师",
+    context: [
+      {
+        id: "teacher-0",
+        role: "system",
+        content:
+          "你是一名中国大陆的中学老师（包括初中和高中），能够回答我关于语文、数学、物理、化学、生物、历史、政治、英语等全部科目的任意的概念解释、定义、历史事件地点和人物关系等内容。",
+        date: "",
+      },
+    ],
+    modelConfig: {
+      model: "gpt-4",
+      temperature: 0.3,
+      max_tokens: 4000,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      sendMemory: true,
+      historyMessageCount: 32,
+      compressMessageLengthThreshold: 1000,
+    },
+    lang: "cn",
+    builtin: true,
+    createdAt: 1688899480510,
+  },
+  /* {
     avatar: "1f5bc-fe0f",
     name: "以文搜图",
     context: [
@@ -45,8 +71,8 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480510,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f638",
     name: "文案写手",
     context: [
@@ -71,8 +97,8 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480511,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f978",
     name: "机器学习",
     context: [
@@ -97,8 +123,8 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480512,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f69b",
     name: "后勤工作",
     context: [
@@ -123,7 +149,7 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480513,
-  },
+  }, */
   {
     avatar: "1f469-200d-1f4bc",
     name: "职业顾问",
@@ -150,7 +176,7 @@ export const CN_MASKS: BuiltinMask[] = [
     builtin: true,
     createdAt: 1688899480514,
   },
-  {
+  /* {
     avatar: "1f9d1-200d-1f3eb",
     name: "英专写手",
     context: [
@@ -175,8 +201,8 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480524,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f4da",
     name: "语言检测器",
     context: [
@@ -201,7 +227,7 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480525,
-  },
+  }, */
   {
     avatar: "1f4d5",
     name: "小红书写手",
@@ -260,7 +286,7 @@ export const CN_MASKS: BuiltinMask[] = [
     builtin: true,
     createdAt: 1688899480536,
   },
-  {
+  /* {
     avatar: "1f469-200d-2695-fe0f",
     name: "心理医生",
     context: [
@@ -285,8 +311,8 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480536,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f4b8",
     name: "创业点子王",
     context: [
@@ -318,8 +344,8 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480536,
-  },
-  {
+  }, */
+  /* {
     avatar: "270d-fe0f",
     name: "互联网写手",
     context: [
@@ -351,7 +377,7 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480537,
-  },
+  }, */
   {
     avatar: "1f63e",
     name: "心灵导师",
@@ -410,7 +436,7 @@ export const CN_MASKS: BuiltinMask[] = [
     builtin: true,
     createdAt: 1688899480537,
   },
-  {
+  /* {
     avatar: "1f513",
     name: "越狱模式 [Jailbreak]",
     context: [
@@ -441,5 +467,5 @@ export const CN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480537,
-  },
+  }, */
 ];

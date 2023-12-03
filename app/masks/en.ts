@@ -1,7 +1,7 @@
 import { BuiltinMask } from "./typing";
 
 export const EN_MASKS: BuiltinMask[] = [
-  {
+  /* {
     avatar: "1f47e",
     name: "GitHub Copilot",
     context: [
@@ -26,8 +26,8 @@ export const EN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480410,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f916",
     name: "Prompt Improvement",
     context: [
@@ -72,8 +72,8 @@ export const EN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480411,
-  },
-  {
+  }, */
+  /* {
     avatar: "2328-fe0f",
     name: "CAN",
     context: [
@@ -98,8 +98,8 @@ export const EN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480412,
-  },
-  {
+  }, */
+  /* {
     avatar: "1f60e",
     name: "Expert",
     context: [
@@ -130,5 +130,5 @@ export const EN_MASKS: BuiltinMask[] = [
     lang: "cn",
     builtin: true,
     createdAt: 1688899480413,
-  },
+  }, */
 ];

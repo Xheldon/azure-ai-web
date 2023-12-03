@@ -24,7 +24,7 @@ const cn = {
   Chat: {
     SubTitle: (count: number) => `共 ${count} 条对话`,
     EditMessage: {
-      Title: "编辑消息记录",
+      Title: "编辑当前助手",
       Topic: {
         Title: "聊天主题",
         SubTitle: "更改当前聊天主题",
@@ -342,7 +342,7 @@ const cn = {
   },
   Store: {
     DefaultTopic: "新的聊天",
-    BotHello: "有什么可以帮你的吗",
+    BotHello: "我是 Xhelper AI，请问有什么可以帮你的吗",
     Error: "出错了，稍后重试吧",
     Prompt: {
       History: (content: string) => "这是历史聊天总结作为前情提要：" + content,
@@ -363,7 +363,7 @@ const cn = {
   Context: {
     Toast: (x: any) => `包含 ${x} 条预设提示词`,
     Edit: "当前对话设置(不懂的话别乱调)",
-    Add: "新增一条对话",
+    Add: "设置助手的提示词",
     Clear: "上下文已清除(继续聊天不会携带本行上面的内容)",
     Revert: "恢复上下文",
   },
@@ -420,7 +420,8 @@ const cn = {
     NotShow: "不再展示",
     ConfirmNoShow: "确认禁用？禁用后可以随时在设置中重新启用。",
     Title: "挑选一个助手",
-    SubTitle: "现在开始，与助手背后的灵魂思维碰撞",
+    SubTitle:
+      "从下方选择一个预设好提示词的助手，也可以点击「查看全部」后选择新建助手然后自己写提示词。注意，预设的助手也同时设置了温度和最大上下文消息条数，如果需要修改，需要选择保存为自己的助手。",
     More: "查看全部",
   },
 

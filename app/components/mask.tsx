@@ -71,6 +71,9 @@ export function MaskConfig(props: {
   mask: Mask;
   updateMask: Updater<Mask>;
   extraListItems?: JSX.Element;
+  // 新建预设助手的时候才需要添加一条消息这个设置，当前正在聊天的时候禁止该设置
+  //  否则 log 的时候（按照 msg 进行的）不好搞
+  forceEnable?: boolean;
   readonly?: boolean;
   shouldSyncFromGlobal?: boolean;
 }) {
@@ -97,14 +100,16 @@ export function MaskConfig(props: {
 
   return (
     <>
-      {/* <ContextPrompts
-        context={props.mask.context}
-        updateContext={(updater) => {
-          const context = props.mask.context.slice();
-          updater(context);
-          props.updateMask((mask) => (mask.context = context));
-        }}
-      /> */}
+      {props.forceEnable ? (
+        <ContextPrompts
+          context={props.mask.context}
+          updateContext={(updater) => {
+            const context = props.mask.context.slice();
+            updater(context);
+            props.updateMask((mask) => (mask.context = context));
+          }}
+        />
+      ) : null}
 
       <List>
         {/* <ListItem title={Locale.Mask.Config.Avatar}>
@@ -331,21 +336,23 @@ export function ContextPrompts(props: {
                           update={(prompt) => updateContextPrompt(i, prompt)}
                           remove={() => removeContextPrompt(i)}
                         />
-                        <div
-                          className={chatStyle["context-prompt-insert"]}
-                          onClick={() => {
-                            addContextPrompt(
-                              createMessage({
-                                role: "user",
-                                content: "",
-                                date: new Date().toLocaleString(),
-                              }),
-                              i + 1,
-                            );
-                          }}
-                        >
-                          <AddIcon />
-                        </div>
+                        {props.context.length === 0 && (
+                          <div
+                            className={chatStyle["context-prompt-insert"]}
+                            onClick={() => {
+                              addContextPrompt(
+                                createMessage({
+                                  role: "user",
+                                  content: "",
+                                  date: new Date().toLocaleString(),
+                                }),
+                                i + 1,
+                              );
+                            }}
+                          >
+                            <AddIcon />
+                          </div>
+                        )}
                       </div>
                     )}
                   </Draggable>
@@ -366,7 +373,8 @@ export function ContextPrompts(props: {
               onClick={() =>
                 addContextPrompt(
                   createMessage({
-                    role: "user",
+                    // Note: 此设置仅在 预设助手中生效，因此新增后默认是 system 预设
+                    role: "system",
                     content: "",
                     date: "",
                   }),
@@ -611,6 +619,7 @@ export function MaskPage() {
           >
             <MaskConfig
               mask={editingMask}
+              forceEnable={true}
               updateMask={(updater) =>
                 maskStore.updateMask(editingMaskId!, updater)
               }

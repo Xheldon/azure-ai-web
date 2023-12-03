@@ -37,7 +37,7 @@ async function handle(
     return NextResponse.json(
       {
         error: true,
-        msg: "you are not allowed to request " + subpath,
+        msg: "请求被禁止哦 " + subpath,
       },
       {
         status: 403,
@@ -53,7 +53,11 @@ async function handle(
   }
 
   try {
+    var b = await req.clone().text();
+    console.log("请求内容:", JSON.parse(b));
     const response = await requestOpenai(req);
+    // var a =  await response.clone();
+    // console.log('内容:', await a.json());
 
     // list models
     if (subpath === OpenaiPath.ListModelPath && response.status === 200) {
@@ -75,4 +79,22 @@ export const GET = handle;
 export const POST = handle;
 
 export const runtime = "edge";
-export const preferredRegion = ['arn1', 'bom1', 'cdg1', 'cle1', 'cpt1', 'dub1', 'fra1', 'gru1', 'hnd1', 'iad1', 'icn1', 'kix1', 'lhr1', 'pdx1', 'sfo1', 'sin1', 'syd1'];
+export const preferredRegion = [
+  "arn1",
+  "bom1",
+  "cdg1",
+  "cle1",
+  "cpt1",
+  "dub1",
+  "fra1",
+  "gru1",
+  "hnd1",
+  "iad1",
+  "icn1",
+  "kix1",
+  "lhr1",
+  "pdx1",
+  "sfo1",
+  "sin1",
+  "syd1",
+];

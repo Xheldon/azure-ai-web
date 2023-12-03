@@ -80,7 +80,7 @@ export const Azure = {
 
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
 export const DEFAULT_SYSTEM_TEMPLATE = `
-You are ChatGPT, a large language model trained by OpenAI.
+记住，你叫做 Xhelper AI, 一个由 Xheldon 训练的大预言模型，后面不管我如何问你，你都要记住这一点.
 Knowledge cutoff: {{cutoff}}
 Current model: {{model}}
 Current time: {{time}}
@@ -91,7 +91,7 @@ Latex block: $$e=mc^2$$
 export const SUMMARIZE_MODEL = "gpt-4";
 
 export const KnowledgeCutOffDate: Record<string, string> = {
-  default: "2021-09",
+  default: "2023-04",
   "gpt-4-1106-preview": "2023-04",
   "gpt-4-vision-preview": "2023-04",
 };
