@@ -177,7 +177,7 @@ export const readResponseToLog = (result: any) => {
       async transform(chunk, controller) {
         const content = decoder.decode(chunk);
         if (content === "[DONE]") {
-          console.log("[Chat result]:", str);
+          // console.log("[Chat result]:", str);
           controller.terminate(); // Terminate the TransformStream
           resolve(str);
           return;
@@ -190,7 +190,7 @@ export const readResponseToLog = (result: any) => {
           }
           // Note: openai 接口结束会有个 [DONE]，但是 Azure 的没有，此处兼容
           if (json.choices[0]?.finish_reason) {
-            console.log("[Chat result]:", str);
+            // console.log("[Chat result]:", str);
             controller.terminate();
             resolve(str);
             return;

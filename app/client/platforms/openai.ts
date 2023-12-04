@@ -76,6 +76,7 @@ export class ChatGPTApi implements LLMApi {
       ...useAppConfig.getState().modelConfig,
       ...useChatStore.getState().currentSession().mask.modelConfig,
       ...{
+        stream: true,
         model: options.config.model,
       },
     };

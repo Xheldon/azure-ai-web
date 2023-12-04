@@ -53,27 +53,42 @@ async function handle(
   }
 
   try {
-    const reqForLogRaw = await req.clone().text();
+    const reqForLogRaw = req.clone().text();
     const response = await requestOpenai(req);
-    var resForLog = await readResponseToLog(await response.clone());
-    // Note: log 不能影响主流程
-    try {
-      const reqForLog = JSON.parse(reqForLogRaw);
-      // Note: access token 以使用人开头，_ 分割后面是真正的 token
-      const nickName = authResult.code?.split("_")[0];
-      const _createtime = new Date(Date.now());
-      _createtime.setUTCHours(_createtime.getUTCHours() + 8);
-      const _createtime_ = _createtime.toISOString();
-      const _messages = reqForLog.messages.slice() || [];
-      _messages.push({ role: "assistant", content: resForLog });
-      if (nickName && authResult.ip && authResult.code) {
-        await sql`insert into web_log (nickname, ip, createtime, messages, temperature, uuid) VALUES (${nickName}, ${authResult.ip}, ${_createtime_}, ${_messages}, ${reqForLog.temperature}, ${authResult.code})`;
-      } else {
-        console.log("[OpenAI Log] Missing required parameters for sql query");
-      }
-    } catch (e) {
-      console.log("[OpenAI Log] log error: ", e);
-    }
+    // Note: log 不能影响主流程，因此异步执行
+    reqForLogRaw
+      .then((str) => {
+        const reqForLog = JSON.parse(str);
+        // console.log('请求内容:', reqForLog);
+        // Note: access token 以使用人开头，_ 分割后面是真正的 token
+        const nickName = authResult.code?.split("_")[0];
+        const _createtime = new Date(Date.now());
+        _createtime.setUTCHours(_createtime.getUTCHours() + 8);
+        const _createtime_ = _createtime.toISOString();
+        const _messages = reqForLog.messages.slice() || [];
+        readResponseToLog(response.clone())
+          .then((resForLog) => {
+            // console.log('resForLog:', resForLog);
+            _messages.push({ role: "assistant", content: resForLog });
+            if (nickName && authResult.ip && authResult.code) {
+              sql`insert into web_log (nickname, ip, createtime, messages, temperature, uuid) VALUES (${nickName}, ${authResult.ip}, ${_createtime_}, ${_messages}, ${reqForLog.temperature}, ${authResult.code})`.catch(
+                (e) => {
+                  console.log("[OpenAI Log] sql insert error: ", e);
+                },
+              );
+            } else {
+              console.log(
+                "[OpenAI Log] Missing required parameters for sql query",
+              );
+            }
+          })
+          .catch((e) => {
+            console.log("[OpenAI Log] response exact error: ", e);
+          });
+      })
+      .catch((e) => {
+        console.log("[OpenAI Log] request read error: ", e);
+      });
     // list models
     if (subpath === OpenaiPath.ListModelPath && response.status === 200) {
       const resJson = (await response.json()) as OpenAIListModelResponse;
