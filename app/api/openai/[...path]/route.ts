@@ -4,7 +4,7 @@ import { OpenaiPath } from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../auth";
-import { requestOpenai } from "../../common";
+import { requestOpenai, readResponseToLog, sql } from "../../common";
 
 const ALLOWD_PATH = new Set(Object.values(OpenaiPath));
 
@@ -53,12 +53,23 @@ async function handle(
   }
 
   try {
-    var b = await req.clone().text();
-    console.log("请求内容:", JSON.parse(b));
+    const reqForLogRaw = await req.clone().text();
     const response = await requestOpenai(req);
-    // var a =  await response.clone();
-    // console.log('内容:', await a.json());
-
+    var resForLog = await readResponseToLog(await response.clone());
+    // Note: log 不能影响主流程
+    try {
+      const reqForLog = JSON.parse(reqForLogRaw);
+      // Note: access token 以使用人开头，_ 分割后面是真正的 token
+      const nickName = authResult.code?.split("_")[0];
+      const _createtime = new Date(Date.now());
+      _createtime.setUTCHours(_createtime.getUTCHours() + 8);
+      const _createtime_ = _createtime.toISOString();
+      const _messages = reqForLog.messages.slice() || [];
+      _messages.push({ role: "assistant", content: resForLog });
+      await sql`insert into web_log (nickname, ip, createtime, messages, temperature, uuid) VALUES (${nickName}, ${authResult.ip}, ${_createtime_}, ${_messages}, ${reqForLog.temperature}, ${authResult.code})`;
+    } catch (e) {
+      console.log("[OpenAI Log] log error: ", e);
+    }
     // list models
     if (subpath === OpenaiPath.ListModelPath && response.status === 200) {
       const resJson = (await response.json()) as OpenAIListModelResponse;
@@ -78,7 +89,8 @@ async function handle(
 export const GET = handle;
 export const POST = handle;
 
-export const runtime = "edge";
+// edge 环境不支持 tcp 连接导致 postgressql 无法使用
+// export const runtime = "edge";
 export const preferredRegion = [
   "arn1",
   "bom1",

@@ -14,9 +14,14 @@ const nextConfig = {
       use: ["@svgr/webpack"],
     });
 
+    // config.plugins.push(
+    //   new webpack.IgnorePlugin({
+    //     resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+    //   }),
+    // );
     if (disableChunk) {
       config.plugins.push(
-        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
       );
     }
 

@@ -1,10 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  createParser,
+  ParsedEvent,
+  ReconnectInterval,
+} from "eventsource-parser";
+import postgres from "postgres";
 import { getServerSideConfig } from "../config/server";
 import { DEFAULT_MODELS, OPENAI_BASE_URL } from "../constant";
 import { collectModelTable } from "../utils/model";
 import { makeAzurePath } from "../azure";
 
 const serverConfig = getServerSideConfig();
+
+export const sql = postgres({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+});
 
 export async function requestOpenai(req: NextRequest) {
   const controller = new AbortController();
@@ -118,3 +132,105 @@ export async function requestOpenai(req: NextRequest) {
     clearTimeout(timeoutId);
   }
 }
+
+export const readResponseToLog = (result: any) => {
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  const readableStream = new ReadableStream({
+    async start(controller) {
+      function onParse(event: ParsedEvent | ReconnectInterval) {
+        if (event.type === "event") {
+          const data = event.data as any;
+          if (data === "[DONE]") {
+            // Signal the end of the stream
+            controller.enqueue(encoder.encode("[DONE]"));
+          }
+          // feed the data to the TransformStream for further processing
+          controller.enqueue(encoder.encode(data));
+        }
+      }
+
+      if (result.status !== 200) {
+        const data = {
+          status: result.status,
+          statusText: result.statusText,
+          body: await result.text(),
+        };
+        console.log(
+          `Error: recieved non-200 status code, ${JSON.stringify(data)}`,
+        );
+        controller.close();
+        return;
+      }
+
+      const parser = createParser(onParse);
+      // https://web.dev/streams/#asynchronous-iteration
+      for await (const chunk of result.body as any) {
+        parser.feed(decoder.decode(chunk));
+      }
+    },
+  });
+  let counter = 0;
+  let str = "";
+  return new Promise(async (resolve) => {
+    const transformStream = new TransformStream({
+      async transform(chunk, controller) {
+        const content = decoder.decode(chunk);
+        if (content === "[DONE]") {
+          console.log("[Chat result]:", str);
+          controller.terminate(); // Terminate the TransformStream
+          resolve(str);
+          return;
+        }
+        try {
+          let json = JSON.parse(content);
+          // Note: 坑：Azure gpt-4 第一个 json 啥也没有
+          if (!json.id || !json.model) {
+            return;
+          }
+          // Note: openai 接口结束会有个 [DONE]，但是 Azure 的没有，此处兼容
+          if (json.choices[0]?.finish_reason) {
+            console.log("[Chat result]:", str);
+            controller.terminate();
+            resolve(str);
+            return;
+          }
+
+          if (json.choices[0]?.delta) {
+            // Note: 因为这个原因: https://vercel.com/docs/concepts/functions/edge-functions/streaming#caveats
+            //  我只返回 content，不返回 json 了，因为不好解析:
+            json = json.choices[0]?.delta?.content || "";
+          }
+          if (!json.id)
+            if (counter < 2 && (json.match(/\n/) || []).length) {
+              // 学习: https://github.com/Nutlope/twitterbio/blob/main/utils/OpenAIStream.ts
+              // 前缀字符: (i.e., "\n\n"), do nothing
+              return;
+            }
+          // console.log('json:', json);
+          str += json;
+          controller.enqueue(encoder.encode(`${json}`));
+          counter++;
+        } catch (e: any) {
+          console.log(`[Chat stream error]:`, e);
+          resolve(`[[OPENAI_ERROR]]${e.toString()}`);
+        }
+      },
+    });
+    const reader = readableStream.pipeThrough(transformStream).getReader();
+    let res = "";
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) {
+        break;
+      }
+
+      // 将数据写入响应对象
+      res += value;
+    }
+
+    // 结束响应
+    resolve(res);
+  });
+};

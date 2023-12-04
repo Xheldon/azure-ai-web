@@ -31,12 +31,13 @@ export function auth(req: NextRequest) {
   const { accessCode, apiKey } = parseApiKey(authToken);
 
   const hashedCode = md5.hash(accessCode ?? "").trim();
+  const ip = getIP(req);
 
   const serverConfig = getServerSideConfig();
   console.log("[Auth] allowed hashed codes: ", [...serverConfig.codes]);
   console.log("[Auth] got access code:", accessCode);
   console.log("[Auth] hashed access code:", hashedCode);
-  console.log("[User IP] ", getIP(req));
+  console.log("[User IP] ", ip);
   console.log("[Time] ", new Date().toLocaleString());
 
   if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !apiKey) {
@@ -74,5 +75,7 @@ export function auth(req: NextRequest) {
 
   return {
     error: false,
+    ip,
+    code: accessCode,
   };
 }
