@@ -66,7 +66,11 @@ async function handle(
       const _createtime_ = _createtime.toISOString();
       const _messages = reqForLog.messages.slice() || [];
       _messages.push({ role: "assistant", content: resForLog });
-      await sql`insert into web_log (nickname, ip, createtime, messages, temperature, uuid) VALUES (${nickName}, ${authResult.ip}, ${_createtime_}, ${_messages}, ${reqForLog.temperature}, ${authResult.code})`;
+      if (nickName && authResult.ip && authResult.code) {
+        await sql`insert into web_log (nickname, ip, createtime, messages, temperature, uuid) VALUES (${nickName}, ${authResult.ip}, ${_createtime_}, ${_messages}, ${reqForLog.temperature}, ${authResult.code})`;
+      } else {
+        console.log("[OpenAI Log] Missing required parameters for sql query");
+      }
     } catch (e) {
       console.log("[OpenAI Log] log error: ", e);
     }
