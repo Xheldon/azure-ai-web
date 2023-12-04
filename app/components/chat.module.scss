@@ -20,6 +20,9 @@
     // width: var(--icon-width);
     overflow: hidden;
     width: 65px;
+    &.chat-input-action-short {
+      width: 40px;
+    }
 
     &:not(:last-child) {
       margin-right: 5px;

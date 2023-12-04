@@ -329,6 +329,7 @@ function ClearContextDivider() {
 function ChatAction(props: {
   text: string;
   icon: JSX.Element;
+  short?: boolean; // icon 短点
   onClick: () => void;
 }) {
   const iconRef = useRef<HTMLDivElement>(null);
@@ -351,7 +352,9 @@ function ChatAction(props: {
 
   return (
     <div
-      className={`${styles["chat-input-action"]} clickable`}
+      className={`${styles["chat-input-action"]} ${
+        props.short ? styles["chat-input-action-short"] : ""
+      } clickable`}
       onClick={() => {
         props.onClick();
         setTimeout(updateWidth, 1);
@@ -1151,7 +1154,7 @@ function _Chat() {
                 <div className={styles["chat-message-container"]}>
                   <div className={styles["chat-message-header"]}>
                     <div className={styles["chat-message-avatar"]}>
-                      {/* <div className={styles["chat-message-edit"]}>
+                      <div className={styles["chat-message-edit"]}>
                         <IconButton
                           icon={<EditIcon />}
                           onClick={async () => {
@@ -1170,7 +1173,7 @@ function _Chat() {
                             });
                           }}
                         ></IconButton>
-                      </div> */}
+                      </div>
                       {isUser ? (
                         <Avatar avatar={config.avatar} />
                       ) : (
@@ -1200,17 +1203,19 @@ function _Chat() {
                             />
                           ) : (
                             <>
-                              {/* <ChatAction
+                              <ChatAction
+                                short
                                 text={Locale.Chat.Actions.Retry}
                                 icon={<ResetIcon />}
                                 onClick={() => onResend(message)}
-                              /> */}
+                              />
 
-                              {/* <ChatAction
+                              <ChatAction
+                                short
                                 text={Locale.Chat.Actions.Delete}
                                 icon={<DeleteIcon />}
                                 onClick={() => onDelete(message.id ?? i)}
-                              /> */}
+                              />
 
                               {/* <ChatAction
                                 text={Locale.Chat.Actions.Pin}
@@ -1218,6 +1223,7 @@ function _Chat() {
                                 onClick={() => onPinMessage(message)}
                               /> */}
                               <ChatAction
+                                short
                                 text={Locale.Chat.Actions.Copy}
                                 icon={<CopyIcon />}
                                 onClick={() => copyToClipboard(message.content)}
